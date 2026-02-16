@@ -1,38 +1,38 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-primary-50: #f5f3ff;
-  --color-primary-100: #ede9fe;
-  --color-primary-200: #ddd6fe;
-  --color-primary-300: #c4b5fd;
-  --color-primary-400: #a78bfa;
-  --color-primary-500: #8b5cf6;
-  --color-primary-600: #7c3aed;
-  --color-primary-700: #6d28d9;
-  --color-primary-800: #5b21b6;
-  --color-primary-900: #4c1d95;
+  --color-primary-50: #faf7fc;
+  --color-primary-100: #f3ecf7;
+  --color-primary-200: #e5d5f0;
+  --color-primary-300: #d1b8e3;
+  --color-primary-400: #b48ed1;
+  --color-primary-500: #9667be;
+  --color-primary-600: #7d4fa8;
+  --color-primary-700: #663d8c;
+  --color-primary-800: #513072;
+  --color-primary-900: #3d2358;
 
-  --color-accent-50: #fff7ed;
-  --color-accent-100: #ffedd5;
-  --color-accent-200: #fed7aa;
-  --color-accent-300: #fdba74;
-  --color-accent-400: #fb923c;
-  --color-accent-500: #f97316;
-  --color-accent-600: #ea580c;
-  --color-accent-700: #c2410c;
-  --color-accent-800: #9a3412;
-  --color-accent-900: #7c2d12;
+  --color-accent-50: #fef9ee;
+  --color-accent-100: #fdf0d5;
+  --color-accent-200: #fbe0a8;
+  --color-accent-300: #f8cb72;
+  --color-accent-400: #f5b544;
+  --color-accent-500: #e89b1a;
+  --color-accent-600: #c97d0e;
+  --color-accent-700: #a45f0b;
+  --color-accent-800: #7e4710;
+  --color-accent-900: #613612;
 
-  --color-coral: #ff6b6b;
-  --color-coral-light: #ffa8a8;
+  --color-coral: #c4604a;
+  --color-coral-light: #e8a999;
 
-  --color-background: #ffffff;
-  --color-foreground: #1e1b4b;
-  --color-muted: #f8fafc;
-  --color-muted-foreground: #64748b;
-  --color-border: #e2e8f0;
+  --color-background: #fdfbf7;
+  --color-foreground: #2c2418;
+  --color-muted: #f5f1ea;
+  --color-muted-foreground: #847669;
+  --color-border: #e3ddd4;
 
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-plus-jakarta);
 }
 
 body {
@@ -42,13 +42,13 @@ body {
 }
 
 .gradient-primary {
-  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+  background: linear-gradient(135deg, #9667be, #513072);
 }
 
 .gradient-accent {
-  background: linear-gradient(135deg, var(--color-accent-400), var(--color-coral));
+  background: linear-gradient(135deg, #f5b544, #c4604a);
 }
 
 .gradient-hero {
-  background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-primary-800) 50%, var(--color-accent-600) 100%);
+  background: linear-gradient(135deg, #7d4fa8 0%, #3d2358 50%, #7e4710 100%);
 }

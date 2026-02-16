@@ -55,6 +55,28 @@ export interface Friction {
   user?: User;
 }
 
+export interface UseCaseStep {
+  title: string;
+  description: string;
+}
+
+export interface UseCase {
+  id: string;
+  title: string;
+  description: string;
+  tools: string[];
+  category: string;
+  complexity: 'beginner' | 'intermediate' | 'advanced';
+  steps: UseCaseStep[];
+  image_url?: string;
+  is_featured: boolean;
+  status: 'pending' | 'approved' | 'rejected';
+  submitted_by: string;
+  created_at: string;
+  // Joined fields
+  user?: User;
+}
+
 export interface LeaderboardEntry {
   location: Location;
   submissions_count: number;

@@ -21,9 +21,9 @@ export function RoleToggle({ currentRole }: RoleToggleProps) {
       onClick={toggle}
       className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors"
       style={{
-        borderColor: currentRole === 'moderator' ? '#ea580c' : '#e2e8f0',
-        backgroundColor: currentRole === 'moderator' ? '#fff7ed' : 'transparent',
-        color: currentRole === 'moderator' ? '#ea580c' : '#64748b',
+        borderColor: currentRole === 'moderator' ? '#c97d0e' : '#e3ddd4',
+        backgroundColor: currentRole === 'moderator' ? '#fef9ee' : 'transparent',
+        color: currentRole === 'moderator' ? '#c97d0e' : '#847669',
       }}
     >
       {currentRole === 'moderator' ? (

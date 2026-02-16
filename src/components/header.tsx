@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Sparkles, Trophy, AlertTriangle, Home, Settings } from 'lucide-react';
+import { Sparkles, Trophy, AlertTriangle, Home, Settings, Lightbulb } from 'lucide-react';
 import { getUser } from '@/lib/auth';
 import { RoleToggle } from './role-toggle';
 
@@ -8,6 +8,7 @@ const navItems = [
   { href: '/missions', label: 'Missions', icon: Sparkles },
   { href: '/leaderboard', label: 'Leaderboard', icon: Trophy },
   { href: '/frictions', label: 'Wall of Friction', icon: AlertTriangle },
+  { href: '/use-cases', label: 'Use Cases', icon: Lightbulb },
 ];
 
 export async function Header() {

@@ -3,9 +3,10 @@ import { getUser } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Settings, FileText, AlertTriangle, MapPin, Sparkles } from 'lucide-react';
+import { Settings, FileText, AlertTriangle, MapPin, Sparkles, Lightbulb } from 'lucide-react';
 import { CreateChallengeForm } from './create-challenge-form';
 import { FrictionReviewList } from './friction-review-list';
+import { UseCaseReviewList } from './use-case-review-list';
 import { SubmissionsList } from './submissions-list';
 import { LocationManager } from './location-manager';
 
@@ -13,11 +14,13 @@ async function getData() {
   const [
     { data: pendingFrictions },
     { data: pendingSubmissions },
+    { data: pendingUseCases },
     { data: challenges },
     { data: locations },
   ] = await Promise.all([
     supabase.from('frictions').select('*, user:users(*)').eq('status', 'pending').order('created_at', { ascending: false }),
     supabase.from('submissions').select('*, user:users(*), challenge:challenges(*)').eq('status', 'pending').order('created_at', { ascending: false }),
+    supabase.from('use_cases').select('*, user:users(*)').eq('status', 'pending').order('created_at', { ascending: false }),
     supabase.from('challenges').select('*').order('created_at', { ascending: false }),
     supabase.from('locations').select('*').order('name'),
   ]);
@@ -25,6 +28,7 @@ async function getData() {
   return {
     pendingFrictions: pendingFrictions ?? [],
     pendingSubmissions: pendingSubmissions ?? [],
+    pendingUseCases: pendingUseCases ?? [],
     challenges: challenges ?? [],
     locations: locations ?? [],
   };
@@ -34,7 +38,7 @@ export default async function ModeratePage() {
   const user = await getUser();
   if (user.role !== 'moderator') redirect('/');
 
-  const { pendingFrictions, pendingSubmissions, challenges, locations } = await getData();
+  const { pendingFrictions, pendingSubmissions, pendingUseCases, challenges, locations } = await getData();
 
   return (
     <div className="space-y-10">
@@ -49,7 +53,7 @@ export default async function ModeratePage() {
       </div>
 
       {/* Stats */}
-      <div className="grid gap-4 sm:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-5">
         <Card>
           <CardContent className="flex items-center gap-3">
             <div className="rounded-lg bg-amber-100 p-2">
@@ -69,6 +73,17 @@ export default async function ModeratePage() {
             <div>
               <p className="text-2xl font-bold">{pendingSubmissions.length}</p>
               <p className="text-xs text-muted-foreground">Pending Submissions</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="flex items-center gap-3">
+            <div className="rounded-lg bg-purple-100 p-2">
+              <Lightbulb className="h-5 w-5 text-purple-600" />
+            </div>
+            <div>
+              <p className="text-2xl font-bold">{pendingUseCases.length}</p>
+              <p className="text-xs text-muted-foreground">Pending Use Cases</p>
             </div>
           </CardContent>
         </Card>
@@ -125,6 +140,24 @@ export default async function ModeratePage() {
           </CardHeader>
           <CardContent>
             <FrictionReviewList frictions={pendingFrictions} />
+          </CardContent>
+        </Card>
+      </section>
+
+      {/* Pending Use Cases */}
+      <section>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Lightbulb className="h-5 w-5 text-purple-500" />
+              Pending Use Cases
+              {pendingUseCases.length > 0 && (
+                <Badge variant="purple">{pendingUseCases.length}</Badge>
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <UseCaseReviewList useCases={pendingUseCases} />
           </CardContent>
         </Card>
       </section>
