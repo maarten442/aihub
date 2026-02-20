@@ -8,8 +8,8 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'AI Hub - Drive AI Adoption',
-  description: 'Monthly missions, leaderboards, and a Wall of Friction to accelerate AI adoption across your organization.',
+  title: 'Miro AI Hub',
+  description: 'Miro\'s internal platform for AI challenges, friction tracking, and use-case sharing — accelerating AI adoption across the organization.',
 };
 
 export default function RootLayout({

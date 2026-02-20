@@ -41,10 +41,10 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl gradient-primary">
-            <Sparkles className="h-7 w-7 text-white" />
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#FFD02F]">
+            <Sparkles className="h-7 w-7 text-[#050038]" />
           </div>
-          <h1 className="text-2xl font-bold text-foreground">AI Hub</h1>
+          <h1 className="text-2xl font-bold text-foreground">Miro <span className="text-primary-600">AI Hub</span></h1>
           <p className="mt-2 text-sm text-muted-foreground">
             Sign in with your Miro email to continue
           </p>

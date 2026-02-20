@@ -17,11 +17,14 @@ export async function Header() {
     <header className="sticky top-0 z-50 border-b border-border bg-white/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
         <div className="flex items-center gap-8">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-primary">
-              <Sparkles className="h-4 w-4 text-white" />
+          <Link href="/" className="flex items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#FFD02F]">
+              <Sparkles className="h-4 w-4 text-[#050038]" />
             </div>
-            <span className="text-lg font-bold text-foreground">AI Hub</span>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-lg font-bold text-foreground">Miro</span>
+              <span className="text-lg font-semibold text-primary-600">AI Hub</span>
+            </div>
           </Link>
           <nav className="hidden items-center gap-1 md:flex">
             {navItems.map(({ href, label, icon: Icon }) => (

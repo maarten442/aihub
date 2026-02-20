@@ -7,7 +7,7 @@ export default function UpdatesPage() {
       <div>
         <h1 className="mb-2 text-3xl font-bold text-foreground">Updates</h1>
         <p className="text-muted-foreground">
-          Stay in the loop on AI Hub news and platform changes.
+          Stay in the loop on Miro AI Hub news and platform changes.
         </p>
       </div>
       <Card>
