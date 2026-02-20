@@ -37,6 +37,8 @@ export async function GET(request: NextRequest) {
 
   // Server-side domain enforcement
   if (!data.user.email.endsWith('@miro.com')) {
+    const domain = data.user.email.split('@')[1];
+    console.warn(`Auth rejected: non-miro.com domain "${domain}" at ${new Date().toISOString()}`);
     await supabase.auth.signOut();
     return NextResponse.redirect(`${origin}/login`);
   }

@@ -17,12 +17,22 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: parsed.error.issues }, { status: 400 });
   }
 
+  const insertData = {
+    ...parsed.data,
+    video_url: parsed.data.video_url || null,
+    status: 'active',
+    created_by: user.id,
+  };
+
   const { data, error } = await supabase
     .from('challenges')
-    .insert({ ...parsed.data, status: 'active', created_by: user.id })
+    .insert(insertData)
     .select()
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error('POST /api/challenges error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
   return NextResponse.json(data, { status: 201 });
 }

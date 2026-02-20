@@ -1,20 +1,33 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Send } from 'lucide-react';
+import { ArrowLeft, Send, XCircle } from 'lucide-react';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { Select } from '@/components/ui/select';
 import { FileUpload } from '@/components/ui/file-upload';
+import type { Challenge, Location } from '@/types';
 
 export default function SubmitHomeworkPage() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [challengeId] = useState('00000000-0000-0000-0000-000000000201');
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [activeChallenge, setActiveChallenge] = useState<Challenge | null | undefined>(undefined);
+
+  useEffect(() => {
+    fetch('/api/locations')
+      .then((r) => r.json())
+      .then(setLocations);
+
+    fetch('/api/challenges/active')
+      .then((r) => r.json())
+      .then((data: Challenge[]) => setActiveChallenge(data?.[0] ?? null));
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -23,6 +36,13 @@ export default function SubmitHomeworkPage() {
 
     const form = new FormData(e.currentTarget);
     const content = form.get('content') as string;
+    const locationId = form.get('location_id') as string;
+
+    if (!locationId) {
+      setErrors({ location_id: 'Please select a hub' });
+      setSubmitting(false);
+      return;
+    }
 
     let fileUrl: string | undefined;
 
@@ -47,7 +67,8 @@ export default function SubmitHomeworkPage() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        challenge_id: challengeId,
+        challenge_id: activeChallenge!.id,
+        location_id: locationId,
         content,
         file_url: fileUrl,
       }),
@@ -73,6 +94,36 @@ export default function SubmitHomeworkPage() {
     router.refresh();
   }
 
+  // Still loading
+  if (activeChallenge === undefined) {
+    return null;
+  }
+
+  // No active challenge — submissions closed
+  if (!activeChallenge) {
+    return (
+      <div className="mx-auto max-w-2xl space-y-6">
+        <div>
+          <Link href="/missions" className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="h-4 w-4" /> Back to Missions
+          </Link>
+          <h1 className="mb-2 text-3xl font-bold text-foreground">Submissions Closed</h1>
+        </div>
+        <Card>
+          <CardContent className="flex flex-col items-center gap-3 py-10 text-center">
+            <XCircle className="h-10 w-10 text-muted-foreground/50" />
+            <p className="text-muted-foreground">
+              There is no active mission at the moment. Submissions are closed until a new mission starts.
+            </p>
+            <Link href="/missions">
+              <Button variant="ghost">View Missions</Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
@@ -88,6 +139,17 @@ export default function SubmitHomeworkPage() {
       <Card>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-5">
+            <Select
+              id="location_id"
+              name="location_id"
+              label="Hub"
+              placeholder="Select your hub"
+              required
+              options={locations.map((l) => ({ value: l.id, label: l.name }))}
+              defaultValue=""
+              error={errors.location_id}
+            />
+
             <Textarea
               id="content"
               name="content"

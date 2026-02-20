@@ -20,11 +20,13 @@ export function CreateChallengeForm() {
     setSuccess(false);
 
     const form = new FormData(e.currentTarget);
+    const videoUrl = (form.get('video_url') as string)?.trim();
     const body = {
       title: form.get('title'),
       description: form.get('description'),
       start_date: form.get('start_date'),
       end_date: form.get('end_date'),
+      video_url: videoUrl || undefined,
     };
 
     const res = await fetch('/api/challenges', {
@@ -92,6 +94,13 @@ export function CreateChallengeForm() {
         placeholder="Describe the challenge, what participants should do, and any bonus criteria."
         required
         error={errors.description}
+      />
+      <Input
+        id="video_url"
+        name="video_url"
+        label="YouTube Video (optional)"
+        placeholder="https://www.youtube.com/watch?v=..."
+        error={errors.video_url}
       />
       {errors.general && <p className="text-sm text-red-600">{errors.general}</p>}
       {success && <p className="text-sm text-emerald-600">Challenge created successfully!</p>}

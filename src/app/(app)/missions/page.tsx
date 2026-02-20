@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { YouTubeEmbed } from '@/components/ui/youtube-embed';
 import type { Challenge } from '@/types';
 
 async function getChallenges(): Promise<{ active: Challenge[]; past: Challenge[] }> {
@@ -66,6 +67,11 @@ export default async function MissionsPage() {
                   <p className="mb-3 text-sm text-muted-foreground line-clamp-3">
                     {challenge.description}
                   </p>
+                  {challenge.video_url && (
+                    <div className="mb-3">
+                      <YouTubeEmbed url={challenge.video_url} />
+                    </div>
+                  )}
                   <div className="mb-4 flex items-center gap-1 text-xs text-muted-foreground">
                     <Calendar className="h-3 w-3" />
                     {formatDateRange(challenge.start_date, challenge.end_date)}

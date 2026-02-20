@@ -4,6 +4,12 @@ import { getUser } from '@/lib/auth';
 import { createUseCaseSchema } from '@/lib/validations';
 
 export async function GET(request: NextRequest) {
+  try {
+    await getUser();
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const { searchParams } = new URL(request.url);
   const status = searchParams.get('status') || 'approved';
   const category = searchParams.get('category');
@@ -12,7 +18,7 @@ export async function GET(request: NextRequest) {
 
   let query = supabase
     .from('use_cases')
-    .select('*, user:users(*)');
+    .select('*, user:users(id, name)');
 
   if (status) query = query.eq('status', status);
   if (category) query = query.eq('category', category);
@@ -25,7 +31,10 @@ export async function GET(request: NextRequest) {
   }
 
   const { data, error } = await query;
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error('GET /api/use-cases error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
   return NextResponse.json(data);
 }
 
@@ -43,6 +52,9 @@ export async function POST(request: NextRequest) {
     .select()
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error('POST /api/use-cases error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
   return NextResponse.json(data, { status: 201 });
 }

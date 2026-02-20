@@ -8,13 +8,12 @@ async function getLeaderboard(): Promise<LeaderboardEntry[]> {
   const { data: locations } = await supabase.from('locations').select('*').order('name');
   const { data: submissions } = await supabase
     .from('submissions')
-    .select('user:users(location_id)')
+    .select('location_id')
     .eq('status', 'approved');
 
   const countsByLocation: Record<string, number> = {};
   for (const sub of submissions ?? []) {
-    const locationId = (sub.user as unknown as { location_id: string })?.location_id;
-    if (locationId) countsByLocation[locationId] = (countsByLocation[locationId] || 0) + 1;
+    if (sub.location_id) countsByLocation[sub.location_id] = (countsByLocation[sub.location_id] || 0) + 1;
   }
 
   return (locations ?? [])

@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { YouTubeEmbed } from '@/components/ui/youtube-embed';
 import type { Challenge, LeaderboardEntry } from '@/types';
 
 async function getActiveChallenge(): Promise<Challenge | null> {
@@ -24,13 +25,12 @@ async function getLeaderboardPreview(): Promise<LeaderboardEntry[]> {
   const { data: locations } = await supabase.from('locations').select('*').order('name');
   const { data: submissions } = await supabase
     .from('submissions')
-    .select('user:users(location_id)')
+    .select('location_id')
     .eq('status', 'approved');
 
   const countsByLocation: Record<string, number> = {};
   for (const sub of submissions ?? []) {
-    const locationId = (sub.user as unknown as { location_id: string })?.location_id;
-    if (locationId) countsByLocation[locationId] = (countsByLocation[locationId] || 0) + 1;
+    if (sub.location_id) countsByLocation[sub.location_id] = (countsByLocation[sub.location_id] || 0) + 1;
   }
 
   return (locations ?? [])
@@ -117,6 +117,11 @@ export default async function HomePage() {
                 <p className="mb-4 text-sm text-muted-foreground line-clamp-2">
                   {challenge.description}
                 </p>
+                {challenge.video_url && (
+                  <div className="mb-4">
+                    <YouTubeEmbed url={challenge.video_url} />
+                  </div>
+                )}
                 <Link href="/challenge/submit">
                   <Button size="sm">
                     Submit your work <ArrowRight className="h-3.5 w-3.5" />

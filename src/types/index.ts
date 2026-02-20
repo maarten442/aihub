@@ -21,6 +21,7 @@ export interface Challenge {
   description: string;
   start_date: string;
   end_date: string;
+  video_url?: string;
   status: 'draft' | 'active' | 'completed';
   created_by: string;
   created_at: string;
@@ -30,6 +31,7 @@ export interface Submission {
   id: string;
   challenge_id: string;
   user_id: string;
+  location_id: string;
   content: string;
   file_url?: string;
   status: 'pending' | 'approved' | 'rejected';

@@ -1,15 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
-import { requireModerator } from '@/lib/auth';
+import { getUser, requireModerator } from '@/lib/auth';
 import { createLocationSchema } from '@/lib/validations';
 
 export async function GET() {
+  try {
+    await getUser();
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const { data, error } = await supabase
     .from('locations')
     .select('*')
     .order('name');
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error('GET /api/locations error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
   return NextResponse.json(data);
 }
 
@@ -32,6 +41,9 @@ export async function POST(request: NextRequest) {
     .select()
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error('POST /api/locations error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
   return NextResponse.json(data, { status: 201 });
 }

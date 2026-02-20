@@ -30,6 +30,7 @@ CREATE TABLE challenges (
   description TEXT NOT NULL,
   start_date DATE NOT NULL,
   end_date DATE NOT NULL,
+  video_url TEXT,
   status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'active', 'completed')),
   created_by UUID REFERENCES users(id),
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -40,6 +41,7 @@ CREATE TABLE submissions (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   challenge_id UUID NOT NULL REFERENCES challenges(id) ON DELETE CASCADE,
   user_id UUID NOT NULL REFERENCES users(id),
+  location_id UUID NOT NULL REFERENCES locations(id),
   content TEXT NOT NULL,
   file_url TEXT,
   status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
@@ -68,6 +70,7 @@ CREATE INDEX idx_challenges_dates ON challenges(start_date, end_date);
 CREATE INDEX idx_submissions_challenge ON submissions(challenge_id);
 CREATE INDEX idx_submissions_user ON submissions(user_id);
 CREATE INDEX idx_submissions_status ON submissions(status);
+CREATE INDEX idx_submissions_location ON submissions(location_id);
 CREATE INDEX idx_frictions_status ON frictions(status);
 CREATE INDEX idx_frictions_submitted_by ON frictions(submitted_by);
 CREATE INDEX idx_users_location ON users(location_id);
@@ -115,6 +118,75 @@ CREATE INDEX idx_use_cases_category ON use_cases(category);
 CREATE INDEX idx_use_cases_submitted_by ON use_cases(submitted_by);
 CREATE INDEX idx_use_cases_is_featured ON use_cases(is_featured);
 CREATE INDEX idx_use_cases_tools ON use_cases USING GIN(tools);
+
+-- ============================================================
+-- Row Level Security (RLS)
+-- The app uses a service role key which bypasses RLS, but
+-- enabling RLS provides defense-in-depth if the key is leaked.
+-- ============================================================
+
+ALTER TABLE locations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE challenges ENABLE ROW LEVEL SECURITY;
+ALTER TABLE submissions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE frictions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE use_cases ENABLE ROW LEVEL SECURITY;
+
+-- Authenticated users can read all locations
+CREATE POLICY "Authenticated users can read locations"
+  ON locations FOR SELECT TO authenticated USING (true);
+
+-- Authenticated users can read all user profiles
+CREATE POLICY "Authenticated users can read users"
+  ON users FOR SELECT TO authenticated USING (true);
+
+-- Users can update their own profile
+CREATE POLICY "Users can update own profile"
+  ON users FOR UPDATE TO authenticated USING (auth.uid() = id);
+
+-- Authenticated users can read all challenges
+CREATE POLICY "Authenticated users can read challenges"
+  ON challenges FOR SELECT TO authenticated USING (true);
+
+-- Authenticated users can read all submissions
+CREATE POLICY "Authenticated users can read submissions"
+  ON submissions FOR SELECT TO authenticated USING (true);
+
+-- Users can insert their own submissions
+CREATE POLICY "Users can insert own submissions"
+  ON submissions FOR INSERT TO authenticated WITH CHECK (auth.uid() = user_id);
+
+-- Authenticated users can read all frictions
+CREATE POLICY "Authenticated users can read frictions"
+  ON frictions FOR SELECT TO authenticated USING (true);
+
+-- Users can insert their own frictions
+CREATE POLICY "Users can insert own frictions"
+  ON frictions FOR INSERT TO authenticated WITH CHECK (auth.uid() = submitted_by);
+
+-- Authenticated users can read all use cases
+CREATE POLICY "Authenticated users can read use_cases"
+  ON use_cases FOR SELECT TO authenticated USING (true);
+
+-- Users can insert their own use cases
+CREATE POLICY "Users can insert own use_cases"
+  ON use_cases FOR INSERT TO authenticated WITH CHECK (auth.uid() = submitted_by);
+
+-- ============================================================
+-- Atomic featured use case toggle (prevents race condition)
+-- ============================================================
+
+CREATE OR REPLACE FUNCTION set_featured_use_case(target_id UUID)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  -- Unset all featured flags and set the target in one transaction
+  UPDATE use_cases SET is_featured = false WHERE is_featured = true AND id != target_id;
+  UPDATE use_cases SET is_featured = true WHERE id = target_id;
+END;
+$$;
 
 -- Seed data: Example frictions
 INSERT INTO frictions (title, description, category, frequency, status, submitted_by, votes) VALUES
