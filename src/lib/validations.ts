@@ -9,8 +9,8 @@ export const createChallengeSchema = z.object({
 }).strip();
 
 export const createSubmissionSchema = z.object({
-  challenge_id: z.uuid(),
-  location_id: z.uuid(),
+  challenge_id: z.guid(),
+  location_id: z.guid(),
   content: z.string().min(1).max(5000),
   file_url: z.string().optional(),
 }).strip();
