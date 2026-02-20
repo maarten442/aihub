@@ -2,7 +2,7 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  location_id: string;
+  location_id: string | null;
   role: 'user' | 'moderator';
   avatar_url?: string;
   created_at: string;

@@ -1,7 +1,6 @@
 import Link from 'next/link';
-import { Sparkles, Trophy, AlertTriangle, Home, Settings, Lightbulb } from 'lucide-react';
+import { Sparkles, Trophy, AlertTriangle, Home, Settings, Lightbulb, LogOut } from 'lucide-react';
 import { getUser } from '@/lib/auth';
-import { RoleToggle } from './role-toggle';
 
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
@@ -47,7 +46,6 @@ export async function Header() {
           </nav>
         </div>
         <div className="flex items-center gap-4">
-          <RoleToggle currentRole={user.role} />
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-100 text-sm font-medium text-primary-700">
               {user.name.charAt(0)}
@@ -56,6 +54,15 @@ export async function Header() {
               {user.name}
             </span>
           </div>
+          <form action="/auth/signout" method="POST">
+            <button
+              type="submit"
+              className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              <LogOut className="h-4 w-4" />
+              <span className="hidden sm:inline">Sign out</span>
+            </button>
+          </form>
         </div>
       </div>
     </header>

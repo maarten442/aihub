@@ -1,23 +1,29 @@
-import { cookies } from 'next/headers';
+import { createSupabaseServer } from './supabase-server';
+import { supabase as serviceClient } from './supabase';
 import type { User } from '@/types';
 
-const ROLE_COOKIE = 'aihub_view_role';
-
-const MOCK_USER: User = {
-  id: '00000000-0000-0000-0000-000000000001',
-  email: 'demo@company.com',
-  name: 'Demo User',
-  location_id: '00000000-0000-0000-0000-000000000101',
-  role: 'user',
-  created_at: new Date().toISOString(),
-};
-
 export async function getUser(): Promise<User> {
-  const cookieStore = await cookies();
-  const roleCookie = cookieStore.get(ROLE_COOKIE);
-  const role = roleCookie?.value === 'moderator' ? 'moderator' : 'user';
+  const supabase = await createSupabaseServer();
 
-  return { ...MOCK_USER, role };
+  const {
+    data: { user: authUser },
+  } = await supabase.auth.getUser();
+
+  if (!authUser?.email) {
+    throw new Error('Not authenticated');
+  }
+
+  const { data: dbUser } = await serviceClient
+    .from('users')
+    .select('*')
+    .eq('id', authUser.id)
+    .single();
+
+  if (!dbUser) {
+    throw new Error('User not found in database');
+  }
+
+  return dbUser as User;
 }
 
 export async function requireModerator(): Promise<User> {

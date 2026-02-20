@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans } from 'next/font/google';
-import { Header } from '@/components/header';
 import './globals.css';
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -21,10 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${plusJakarta.variable} antialiased`}>
-        <Header />
-        <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-          {children}
-        </main>
+        {children}
       </body>
     </html>
   );
