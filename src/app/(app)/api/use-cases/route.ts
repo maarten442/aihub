@@ -39,7 +39,13 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const user = await getUser();
+  let user;
+  try {
+    user = await getUser();
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const body = await request.json();
   const parsed = createUseCaseSchema.safeParse(body);
   if (!parsed.success) {

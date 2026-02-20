@@ -14,7 +14,12 @@ const ALLOWED_MIME_TYPES = new Set([
 ]);
 
 export async function POST(request: NextRequest) {
-  const user = await getUser();
+  let user;
+  try {
+    user = await getUser();
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
   const formData = await request.formData();
   const file = formData.get('file') as File | null;
