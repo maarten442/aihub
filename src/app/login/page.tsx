@@ -42,7 +42,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <Image src="/miroai2.png" alt="Miro AI Hub" width={56} height={56} className="mx-auto mb-4 rounded-2xl" />
+          <Image src="/miroai2.png" alt="Miro AI Hub" width={112} height={112} className="mx-auto mb-4 rounded-2xl" />
           <h1 className="text-2xl font-bold text-foreground">Miro <span className="text-primary-600">AI Hub</span></h1>
           <p className="mt-2 text-sm text-muted-foreground">
             Sign in with your Miro email to continue
