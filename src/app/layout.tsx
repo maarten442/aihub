@@ -10,6 +10,10 @@ const plusJakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: 'Miro AI Hub',
   description: 'Miro\'s internal platform for AI challenges, friction tracking, and use-case sharing — accelerating AI adoption across the organization.',
+  icons: {
+    icon: '/miroai2.png',
+    apple: '/miroai2.png',
+  },
 };
 
 export default function RootLayout({

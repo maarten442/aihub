@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Sparkles, Trophy, AlertTriangle, Home, Settings, Lightbulb, LogOut } from 'lucide-react';
 import { getUser } from '@/lib/auth';
 
@@ -18,9 +19,7 @@ export async function Header() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#FFD02F]">
-              <Sparkles className="h-4 w-4 text-[#050038]" />
-            </div>
+            <Image src="/miroai2.png" alt="Miro AI Hub" width={32} height={32} className="rounded-lg" />
             <div className="flex items-baseline gap-1.5">
               <span className="text-lg font-bold text-foreground">Miro</span>
               <span className="text-lg font-semibold text-primary-600">AI Hub</span>
