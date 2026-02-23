@@ -36,7 +36,6 @@ export default function FrictionsLoading() {
               </div>
               <div className="flex items-center justify-between border-t border-border pt-3">
                 <div className="flex gap-3">
-                  <div className="h-4 w-16 rounded bg-muted" />
                   <div className="h-4 w-24 rounded bg-muted" />
                 </div>
                 <div className="h-5 w-16 rounded-full bg-muted" />

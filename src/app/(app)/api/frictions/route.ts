@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const status = searchParams.get('status');
   const category = searchParams.get('category');
-  const sort = searchParams.get('sort') || 'votes';
+  const sort = searchParams.get('sort') || 'recent';
 
   let query = supabase
     .from('frictions')
@@ -22,9 +22,7 @@ export async function GET(request: NextRequest) {
   if (status) query = query.eq('status', status);
   if (category) query = query.eq('category', category);
 
-  if (sort === 'votes') {
-    query = query.order('votes', { ascending: false });
-  } else if (sort === 'recent') {
+  if (sort === 'recent') {
     query = query.order('created_at', { ascending: false });
   } else if (sort === 'impact') {
     query = query.order('impact_score', { ascending: false, nullsFirst: false });

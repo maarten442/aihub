@@ -52,7 +52,6 @@ export interface Friction {
   impact_score?: number;
   status: 'pending' | 'approved' | 'rejected' | 'resolved';
   submitted_by: string;
-  votes: number;
   created_at: string;
   // Joined fields
   user?: User;

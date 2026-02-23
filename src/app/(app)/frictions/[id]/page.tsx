@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, ThumbsUp, Clock, Zap } from 'lucide-react';
+import { ArrowLeft, Clock, Zap } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -65,10 +65,6 @@ export default async function FrictionDetailPage({ params }: { params: Promise<{
             <span className="flex items-center gap-1">
               <Clock className="h-3 w-3" />
               {frequencyLabel[friction.frequency]}
-            </span>
-            <span className="flex items-center gap-1">
-              <ThumbsUp className="h-3 w-3" />
-              {friction.votes} votes
             </span>
           </div>
 

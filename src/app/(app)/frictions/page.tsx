@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { AlertTriangle, ThumbsUp, Plus, Clock, Zap } from 'lucide-react';
+import { AlertTriangle, Plus, Clock, Zap } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -11,7 +11,7 @@ async function getFrictions(): Promise<Friction[]> {
     .from('frictions')
     .select('*, user:users(*)')
     .in('status', ['approved', 'resolved'])
-    .order('votes', { ascending: false });
+    .order('created_at', { ascending: false });
   return (data ?? []) as Friction[];
 }
 
@@ -81,10 +81,6 @@ export default async function FrictionsPage() {
                     </p>
                     <div className="flex items-center justify-between border-t border-border pt-3">
                       <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1">
-                          <ThumbsUp className="h-3 w-3" />
-                          {friction.votes} votes
-                        </span>
                         <span className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />
                           {frequencyLabel[friction.frequency]}

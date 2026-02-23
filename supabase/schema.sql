@@ -63,7 +63,6 @@ CREATE TABLE frictions (
   impact_score INTEGER CHECK (impact_score >= 1 AND impact_score <= 10),
   status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected', 'resolved')),
   submitted_by UUID NOT NULL REFERENCES users(id),
-  votes INTEGER NOT NULL DEFAULT 0,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
@@ -193,10 +192,10 @@ END;
 $$;
 
 -- Seed data: Example frictions
-INSERT INTO frictions (title, description, category, frequency, status, submitted_by, votes) VALUES
-  ('Manual report generation takes hours', 'Every Monday I spend 3 hours copying data from multiple sources into a weekly report. This could be automated with AI.', 'Data & Reporting', 'weekly', 'approved', '00000000-0000-0000-0000-000000000001', 12),
-  ('Translating customer emails manually', 'We get customer emails in 5+ languages and manually translate them before routing. An AI translation layer would save significant time.', 'Communication', 'daily', 'approved', '00000000-0000-0000-0000-000000000001', 8),
-  ('No consistent meeting summaries', 'Meeting notes are inconsistent or missing entirely. AI transcription and summarization would help.', 'Meetings & Collaboration', 'daily', 'pending', '00000000-0000-0000-0000-000000000001', 5);
+INSERT INTO frictions (title, description, category, frequency, status, submitted_by) VALUES
+  ('Manual report generation takes hours', 'Every Monday I spend 3 hours copying data from multiple sources into a weekly report. This could be automated with AI.', 'Data & Reporting', 'weekly', 'approved', '00000000-0000-0000-0000-000000000001'),
+  ('Translating customer emails manually', 'We get customer emails in 5+ languages and manually translate them before routing. An AI translation layer would save significant time.', 'Communication', 'daily', 'approved', '00000000-0000-0000-0000-000000000001'),
+  ('No consistent meeting summaries', 'Meeting notes are inconsistent or missing entirely. AI transcription and summarization would help.', 'Meetings & Collaboration', 'daily', 'pending', '00000000-0000-0000-0000-000000000001');
 
 -- Seed data: Example use cases
 INSERT INTO use_cases (id, title, description, tools, category, complexity, steps, is_featured, status, submitted_by) VALUES
