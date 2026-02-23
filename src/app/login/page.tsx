@@ -14,8 +14,7 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
 
-    const allowedEmails = ['maartenrottier@gmail.com'];
-    if (!email.endsWith('@miro.com') && !allowedEmails.includes(email.toLowerCase())) {
+    if (!email.endsWith('@miro.com')) {
       setError('Please use your @miro.com email address.');
       return;
     }
