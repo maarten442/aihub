@@ -47,10 +47,11 @@ export function MarkdownEditor({
   onChange,
   value,
   defaultValue,
+  placeholder,
   ...props
 }: MarkdownEditorProps) {
   const ref = useRef<HTMLTextAreaElement>(null);
-  const [mode, setMode] = useState<'write' | 'preview'>('write');
+  const [editing, setEditing] = useState(false);
   const [content, setContent] = useState<string>(
     String(value ?? defaultValue ?? ''),
   );
@@ -91,13 +92,17 @@ export function MarkdownEditor({
           {label}
         </label>
       )}
-      <div className="overflow-hidden rounded-lg border border-border focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20">
-        {/* Header row */}
-        <div className="flex items-center justify-between border-b border-border bg-muted/30 px-2 py-1">
-          {/* Left: formatting toolbar */}
-          <div
-            className={`flex items-center gap-1 transition-opacity ${mode === 'preview' ? 'pointer-events-none opacity-0' : 'opacity-100'}`}
-          >
+      <div
+        className={`overflow-hidden rounded-lg border border-border transition-all ${
+          editing ? 'border-primary-500 ring-2 ring-primary-500/20' : 'hover:border-border/80'
+        }`}
+      >
+        {/* Always in DOM for FormData */}
+        <textarea hidden name={props.name} value={content} onChange={() => {}} />
+
+        {/* Toolbar: only shown when editing */}
+        {editing && (
+          <div className="flex items-center gap-1 border-b border-border bg-muted/30 px-2 py-1">
             {inlineButtons.map(({ label: btnLabel, title, action }) => (
               <button
                 key={btnLabel}
@@ -122,28 +127,10 @@ export function MarkdownEditor({
               </button>
             ))}
           </div>
-
-          {/* Right: Write/Preview pill toggle */}
-          <div className="rounded-full bg-muted p-0.5 flex items-center gap-0.5">
-            {(['write', 'preview'] as const).map((m) => (
-              <button
-                key={m}
-                type="button"
-                onClick={() => setMode(m)}
-                className={`rounded-full px-2.5 py-0.5 text-xs font-medium capitalize transition-all ${
-                  mode === m
-                    ? 'bg-white text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                {m}
-              </button>
-            ))}
-          </div>
-        </div>
+        )}
 
         {/* Body */}
-        {mode === 'write' ? (
+        {editing ? (
           <textarea
             ref={ref}
             id={id}
@@ -151,20 +138,23 @@ export function MarkdownEditor({
             value={content}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
+            onBlur={() => setEditing(false)}
+            autoFocus
             className="block w-full bg-white px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
             {...props}
+            name={undefined}
           />
         ) : (
-          <>
-            <textarea hidden value={content} onChange={() => {}} {...props} />
-            <div className="min-h-[8lh] px-3 py-2 text-sm text-foreground">
-              {content ? (
-                <MarkdownContent>{content}</MarkdownContent>
-              ) : (
-                <span className="text-muted-foreground">Nothing to preview yet.</span>
-              )}
-            </div>
-          </>
+          <div
+            onClick={() => setEditing(true)}
+            className="cursor-text min-h-[10rem] px-3 py-2 text-sm"
+          >
+            {content ? (
+              <MarkdownContent>{content}</MarkdownContent>
+            ) : (
+              <span className="text-muted-foreground">{placeholder ?? 'Add a description...'}</span>
+            )}
+          </div>
         )}
       </div>
       {error && <p className="text-xs text-red-600">{error}</p>}
