@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { YouTubeEmbed } from '@/components/ui/youtube-embed';
+import { MarkdownContent } from '@/components/ui/markdown-content';
 import type { Challenge } from '@/types';
 
 async function getChallenge(id: string): Promise<Challenge | null> {
@@ -61,7 +62,7 @@ export default async function MissionDetailPage({ params }: { params: Promise<{ 
 
       <Card>
         <CardContent className="space-y-5">
-          <p className="text-muted-foreground leading-relaxed">{challenge.description}</p>
+          <MarkdownContent className="text-muted-foreground leading-relaxed">{challenge.description}</MarkdownContent>
 
           {challenge.why_it_matters && (
             <div className="rounded-lg bg-primary-50 border border-primary-100 p-4">
@@ -69,7 +70,7 @@ export default async function MissionDetailPage({ params }: { params: Promise<{ 
                 <Lightbulb className="h-4 w-4" />
                 Why it matters
               </h2>
-              <p className="text-sm text-primary-800 leading-relaxed">{challenge.why_it_matters}</p>
+              <MarkdownContent className="text-sm text-primary-800 leading-relaxed">{challenge.why_it_matters}</MarkdownContent>
             </div>
           )}
 

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { MarkdownEditor } from '@/components/ui/markdown-editor';
 import { Send } from 'lucide-react';
 
 export function CreateChallengeForm() {
@@ -89,12 +90,13 @@ export function CreateChallengeForm() {
           />
         </div>
       </div>
-      <Textarea
+      <MarkdownEditor
         id="challenge-description"
         name="description"
         label="Description"
         placeholder="Describe the challenge, what participants should do, and any bonus criteria."
         required
+        rows={8}
         error={errors.description}
       />
       <Textarea
