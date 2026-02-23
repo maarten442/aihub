@@ -54,6 +54,11 @@ export default function SubmitHomeworkPage() {
       }),
     });
 
+    if (res.status === 409) {
+      setSubmitted(true);
+      return;
+    }
+
     if (!res.ok) {
       const data = await res.json();
       if (Array.isArray(data.error)) {
@@ -172,7 +177,9 @@ export default function SubmitHomeworkPage() {
             />
 
             {errors.general && (
-              <p className="text-sm text-red-600">{errors.general}</p>
+              <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                {errors.general}
+              </div>
             )}
 
             <div className="flex justify-end gap-3 pt-2">

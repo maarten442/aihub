@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { ArrowLeft, Send } from 'lucide-react';
+import { ArrowLeft, Send, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -27,8 +26,8 @@ const frequencies = [
 ];
 
 export default function SubmitFrictionPage() {
-  const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -66,8 +65,30 @@ export default function SubmitFrictionPage() {
       return;
     }
 
-    router.push('/frictions');
-    router.refresh();
+    setSubmitted(true);
+  }
+
+  if (submitted) {
+    return (
+      <div className="mx-auto max-w-2xl space-y-6">
+        <Card>
+          <CardContent className="flex flex-col items-center gap-4 py-12 text-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-100">
+              <CheckCircle2 className="h-7 w-7 text-primary-600" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-foreground">Friction point reported!</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Thanks for flagging this. Your submission is pending review and will appear on the Wall of Friction once approved.
+              </p>
+            </div>
+            <Link href="/frictions">
+              <Button variant="secondary">Back to Wall of Friction</Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   return (
@@ -123,7 +144,9 @@ export default function SubmitFrictionPage() {
             </div>
 
             {errors.general && (
-              <p className="text-sm text-red-600">{errors.general}</p>
+              <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                {errors.general}
+              </div>
             )}
 
             <div className="flex justify-end gap-3 pt-2">
