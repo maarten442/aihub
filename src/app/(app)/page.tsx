@@ -98,7 +98,7 @@ export default async function HomePage() {
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-xl font-bold text-foreground">Active Mission</h2>
             <Link href="/missions" className="text-sm font-medium text-primary-600 hover:text-primary-700">
-              All missions <ArrowRight className="inline h-3.5 w-3.5" />
+              Mission library <ArrowRight className="inline h-3.5 w-3.5" />
             </Link>
           </div>
           {challenge ? (
@@ -125,12 +125,12 @@ export default async function HomePage() {
                 <div className="flex flex-wrap gap-2">
                   <Link href={`/missions/${challenge.id}`}>
                     <Button size="sm">
-                      Take on the Challenge <ArrowRight className="h-3.5 w-3.5" />
+                      Read more <ArrowRight className="h-3.5 w-3.5" />
                     </Button>
                   </Link>
                   <Link href="/challenge/submit">
                     <Button size="sm" variant="secondary">
-                      Submit your work <ArrowRight className="h-3.5 w-3.5" />
+                      Join the mission <ArrowRight className="h-3.5 w-3.5" />
                     </Button>
                   </Link>
                 </div>

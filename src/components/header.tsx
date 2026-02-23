@@ -30,9 +30,9 @@ export async function Header() {
               <Link
                 key={href}
                 href={href}
-                className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-foreground/70 transition-colors hover:bg-primary-50 hover:text-primary-600 [&:hover_svg]:text-primary-500"
               >
-                <Icon className="h-4 w-4" />
+                <Icon className="h-4 w-4 text-muted-foreground transition-colors" />
                 {label}
               </Link>
             ))}

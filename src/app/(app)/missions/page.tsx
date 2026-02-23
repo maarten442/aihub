@@ -72,7 +72,7 @@ export default async function MissionsPage() {
                       {formatDateRange(challenge.start_date, challenge.end_date)}
                     </div>
                     <Button size="sm">
-                      Take on the Challenge <ArrowRight className="h-3.5 w-3.5" />
+                      Read more <ArrowRight className="h-3.5 w-3.5" />
                     </Button>
                   </CardContent>
                 </Card>

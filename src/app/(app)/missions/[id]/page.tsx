@@ -87,7 +87,7 @@ export default async function MissionDetailPage({ params }: { params: Promise<{ 
             <div className="pt-2">
               <Link href="/challenge/submit">
                 <Button>
-                  Submit your work <ArrowRight className="h-4 w-4" />
+                  Join the mission <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
             </div>

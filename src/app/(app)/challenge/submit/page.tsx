@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { ArrowLeft, Send, XCircle } from 'lucide-react';
+import { ArrowLeft, Send, XCircle, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,8 +11,8 @@ import { Select } from '@/components/ui/select';
 import type { Challenge, Location } from '@/types';
 
 export default function SubmitHomeworkPage() {
-  const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [locations, setLocations] = useState<Location[]>([]);
   const [activeChallenge, setActiveChallenge] = useState<Challenge | null | undefined>(undefined);
@@ -71,8 +70,30 @@ export default function SubmitHomeworkPage() {
       return;
     }
 
-    router.push('/missions');
-    router.refresh();
+    setSubmitted(true);
+  }
+
+  if (submitted) {
+    return (
+      <div className="mx-auto max-w-2xl space-y-6">
+        <Card>
+          <CardContent className="flex flex-col items-center gap-4 py-12 text-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-100">
+              <CheckCircle2 className="h-7 w-7 text-primary-600" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-foreground">Submission received!</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Your work has been submitted and is pending review. A moderator will approve it shortly.
+              </p>
+            </div>
+            <Link href="/missions">
+              <Button variant="secondary">Back to Missions</Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   // Still loading
