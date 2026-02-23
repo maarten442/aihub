@@ -4,7 +4,6 @@ import { supabase } from '@/lib/supabase';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { YouTubeEmbed } from '@/components/ui/youtube-embed';
 import type { Challenge } from '@/types';
 
 async function getChallenges(): Promise<{ active: Challenge[]; past: Challenge[] }> {
@@ -53,36 +52,31 @@ export default async function MissionsPage() {
         {active.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2">
             {active.map((challenge) => (
-              <Card key={challenge.id} hover className="relative overflow-hidden">
-                <div className="absolute left-0 top-0 h-full w-1 bg-primary-500" />
-                <CardContent className="pl-5">
-                  <div className="mb-3 flex items-center gap-2">
-                    <Badge variant="purple">Active</Badge>
-                    <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Clock className="h-3 w-3" />
-                      {daysRemaining(challenge.end_date)} days left
-                    </span>
-                  </div>
-                  <h3 className="mb-2 text-lg font-semibold text-foreground">{challenge.title}</h3>
-                  <p className="mb-3 text-sm text-muted-foreground line-clamp-3">
-                    {challenge.description}
-                  </p>
-                  {challenge.video_url && (
-                    <div className="mb-3">
-                      <YouTubeEmbed url={challenge.video_url} />
+              <Link key={challenge.id} href={`/missions/${challenge.id}`} className="block">
+                <Card hover className="relative overflow-hidden h-full">
+                  <div className="absolute left-0 top-0 h-full w-1 bg-primary-500" />
+                  <CardContent className="pl-5">
+                    <div className="mb-3 flex items-center gap-2">
+                      <Badge variant="purple">Active</Badge>
+                      <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Clock className="h-3 w-3" />
+                        {daysRemaining(challenge.end_date)} days left
+                      </span>
                     </div>
-                  )}
-                  <div className="mb-4 flex items-center gap-1 text-xs text-muted-foreground">
-                    <Calendar className="h-3 w-3" />
-                    {formatDateRange(challenge.start_date, challenge.end_date)}
-                  </div>
-                  <Link href="/challenge/submit">
+                    <h3 className="mb-2 text-lg font-semibold text-foreground">{challenge.title}</h3>
+                    <p className="mb-3 text-sm text-muted-foreground line-clamp-3">
+                      {challenge.description}
+                    </p>
+                    <div className="mb-4 flex items-center gap-1 text-xs text-muted-foreground">
+                      <Calendar className="h-3 w-3" />
+                      {formatDateRange(challenge.start_date, challenge.end_date)}
+                    </div>
                     <Button size="sm">
-                      Submit your work <ArrowRight className="h-3.5 w-3.5" />
+                      Take on the Challenge <ArrowRight className="h-3.5 w-3.5" />
                     </Button>
-                  </Link>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         ) : (

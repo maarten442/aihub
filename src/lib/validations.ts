@@ -3,6 +3,7 @@ import { z } from 'zod/v4';
 export const createChallengeSchema = z.object({
   title: z.string().min(3).max(200),
   description: z.string().min(10).max(2000),
+  why_it_matters: z.string().min(10).max(1000).optional(),
   start_date: z.iso.date(),
   end_date: z.iso.date(),
   video_url: z.string().regex(/^https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)[\w-]+/, 'Must be a valid YouTube URL').optional(),

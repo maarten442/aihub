@@ -6,15 +6,14 @@ import { ArrowLeft, Send, XCircle } from 'lucide-react';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select } from '@/components/ui/select';
-import { FileUpload } from '@/components/ui/file-upload';
 import type { Challenge, Location } from '@/types';
 
 export default function SubmitHomeworkPage() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [locations, setLocations] = useState<Location[]>([]);
   const [activeChallenge, setActiveChallenge] = useState<Challenge | null | undefined>(undefined);
@@ -37,30 +36,12 @@ export default function SubmitHomeworkPage() {
     const form = new FormData(e.currentTarget);
     const content = form.get('content') as string;
     const locationId = form.get('location_id') as string;
+    const miroUrl = (form.get('miro_url') as string)?.trim() || undefined;
 
     if (!locationId) {
       setErrors({ location_id: 'Please select a hub' });
       setSubmitting(false);
       return;
-    }
-
-    let fileUrl: string | undefined;
-
-    // Upload file first if present
-    if (file) {
-      const uploadForm = new FormData();
-      uploadForm.append('file', file);
-      const uploadRes = await fetch('/api/uploads', { method: 'POST', body: uploadForm });
-
-      if (!uploadRes.ok) {
-        const data = await uploadRes.json();
-        setErrors({ file: data.error || 'File upload failed' });
-        setSubmitting(false);
-        return;
-      }
-
-      const uploadData = await uploadRes.json();
-      fileUrl = uploadData.path;
     }
 
     const res = await fetch('/api/submissions', {
@@ -70,7 +51,7 @@ export default function SubmitHomeworkPage() {
         challenge_id: activeChallenge!.id,
         location_id: locationId,
         content,
-        file_url: fileUrl,
+        file_url: miroUrl,
       }),
     });
 
@@ -130,9 +111,10 @@ export default function SubmitHomeworkPage() {
         <Link href="/missions" className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="h-4 w-4" /> Back to Missions
         </Link>
-        <h1 className="mb-2 text-3xl font-bold text-foreground">Submit Your Work</h1>
-        <p className="text-muted-foreground">
-          Share what you built or discovered for the current mission. Include a description and optionally attach a file.
+        <h1 className="mb-1 text-3xl font-bold text-foreground">Submit Your Work</h1>
+        <p className="text-sm text-muted-foreground">For: {activeChallenge.title}</p>
+        <p className="mt-2 text-muted-foreground">
+          Build your solution on a Miro board, then describe it below and share the link.
         </p>
       </div>
 
@@ -153,16 +135,19 @@ export default function SubmitHomeworkPage() {
             <Textarea
               id="content"
               name="content"
-              label="What did you do?"
-              placeholder="Describe your approach, the tools you used, and the result. Be specific!"
+              label="Describe your solution"
+              placeholder="Build your solution on a Miro board and describe what you made, how you built it, and what the result was. What AI tools did you use?"
               required
               error={errors.content}
             />
 
-            <FileUpload
-              label="Attachment (optional)"
-              onFileSelect={setFile}
-              error={errors.file}
+            <Input
+              id="miro_url"
+              name="miro_url"
+              type="url"
+              label="Miro Board Link (optional)"
+              placeholder="https://miro.com/app/board/..."
+              error={errors.miro_url}
             />
 
             {errors.general && (

@@ -64,35 +64,37 @@ export default async function FrictionsPage() {
           {frictions.map((friction) => {
             const badge = statusBadge[friction.status] ?? { label: friction.status, variant: 'default' as const };
             return (
-              <Card key={friction.id} hover className="flex flex-col">
-                <CardContent className="flex flex-1 flex-col">
-                  <div className="mb-3 flex items-center justify-between">
-                    <Badge variant={badge.variant}>{badge.label}</Badge>
-                    {friction.impact_score && (
-                      <span className="flex items-center gap-1 text-xs font-medium text-accent-600">
-                        <Zap className="h-3 w-3" /> Impact: {friction.impact_score}/10
-                      </span>
-                    )}
-                  </div>
-                  <h3 className="mb-2 font-semibold text-foreground">{friction.title}</h3>
-                  <p className="mb-3 flex-1 text-sm text-muted-foreground line-clamp-3">
-                    {friction.description}
-                  </p>
-                  <div className="flex items-center justify-between border-t border-border pt-3">
-                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <ThumbsUp className="h-3 w-3" />
-                        {friction.votes} votes
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        {frequencyLabel[friction.frequency]}
-                      </span>
+              <Link key={friction.id} href={`/frictions/${friction.id}`} className="block">
+                <Card hover className="flex flex-col h-full">
+                  <CardContent className="flex flex-1 flex-col">
+                    <div className="mb-3 flex items-center justify-between">
+                      <Badge variant={badge.variant}>{badge.label}</Badge>
+                      {friction.impact_score && (
+                        <span className="flex items-center gap-1 text-xs font-medium text-accent-600">
+                          <Zap className="h-3 w-3" /> Impact: {friction.impact_score}/10
+                        </span>
+                      )}
                     </div>
-                    <Badge>{friction.category}</Badge>
-                  </div>
-                </CardContent>
-              </Card>
+                    <h3 className="mb-2 font-semibold text-foreground">{friction.title}</h3>
+                    <p className="mb-3 flex-1 text-sm text-muted-foreground line-clamp-3">
+                      {friction.description}
+                    </p>
+                    <div className="flex items-center justify-between border-t border-border pt-3">
+                      <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1">
+                          <ThumbsUp className="h-3 w-3" />
+                          {friction.votes} votes
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          {frequencyLabel[friction.frequency]}
+                        </span>
+                      </div>
+                      <Badge>{friction.category}</Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
             );
           })}
         </div>

@@ -19,6 +19,7 @@ export interface Challenge {
   id: string;
   title: string;
   description: string;
+  why_it_matters?: string;
   start_date: string;
   end_date: string;
   video_url?: string;
