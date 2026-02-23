@@ -108,6 +108,7 @@ export function MarkdownEditor({
                 key={btnLabel}
                 type="button"
                 title={title}
+                onMouseDown={(e) => e.preventDefault()}
                 onClick={action}
                 className="rounded px-2 py-0.5 text-xs font-medium text-muted-foreground hover:bg-background hover:text-foreground"
               >
@@ -120,6 +121,7 @@ export function MarkdownEditor({
                 key={btnLabel}
                 type="button"
                 title={title}
+                onMouseDown={(e) => e.preventDefault()}
                 onClick={action}
                 className="rounded px-2 py-0.5 text-xs font-medium text-muted-foreground hover:bg-background hover:text-foreground"
               >
