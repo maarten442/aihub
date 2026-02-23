@@ -14,6 +14,7 @@ interface Props {
 export function FrictionReviewList({ frictions }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
+  const [impactScores, setImpactScores] = useState<Record<string, number>>({});
 
   async function updateFriction(id: string, status: 'approved' | 'rejected', impactScore?: number) {
     setLoading(id);
@@ -45,10 +46,25 @@ export function FrictionReviewList({ frictions }: Props) {
             </div>
           </div>
           <p className="mb-3 text-sm text-muted-foreground">{friction.description}</p>
+          <div className="mb-3 flex items-center gap-2">
+            <span className="text-xs text-muted-foreground">Impact:</span>
+            {[1,2,3,4,5,6,7,8,9,10].map(n => (
+              <button
+                key={n}
+                onClick={() => setImpactScores(prev => ({ ...prev, [friction.id]: n }))}
+                className={`h-6 w-6 rounded text-xs font-medium transition-colors
+                  ${(impactScores[friction.id] ?? 5) === n
+                    ? 'bg-accent-500 text-white'
+                    : 'bg-muted text-muted-foreground hover:bg-accent-100'}`}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
           <div className="flex items-center gap-2">
             <Button
               size="sm"
-              onClick={() => updateFriction(friction.id, 'approved', 5)}
+              onClick={() => updateFriction(friction.id, 'approved', impactScores[friction.id] ?? 5)}
               disabled={loading === friction.id}
             >
               <Check className="h-3.5 w-3.5" /> Approve

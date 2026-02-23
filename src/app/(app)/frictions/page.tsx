@@ -36,7 +36,7 @@ export default async function FrictionsPage() {
         <div>
           <h1 className="mb-2 text-3xl font-bold text-foreground">Wall of Friction</h1>
           <p className="text-muted-foreground">
-            Surface the recurring pain points where AI could save time. Vote to prioritize.
+            Surface the recurring pain points where AI could save time.
           </p>
         </div>
         <Link href="/frictions/submit">
