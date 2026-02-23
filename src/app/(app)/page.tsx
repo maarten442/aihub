@@ -122,11 +122,18 @@ export default async function HomePage() {
                     <YouTubeEmbed url={challenge.video_url} />
                   </div>
                 )}
-                <Link href="/challenge/submit">
-                  <Button size="sm">
-                    Submit your work <ArrowRight className="h-3.5 w-3.5" />
-                  </Button>
-                </Link>
+                <div className="flex flex-wrap gap-2">
+                  <Link href={`/missions/${challenge.id}`}>
+                    <Button size="sm">
+                      Take on the Challenge <ArrowRight className="h-3.5 w-3.5" />
+                    </Button>
+                  </Link>
+                  <Link href="/challenge/submit">
+                    <Button size="sm" variant="secondary">
+                      Submit your work <ArrowRight className="h-3.5 w-3.5" />
+                    </Button>
+                  </Link>
+                </div>
               </CardContent>
             </Card>
           ) : (

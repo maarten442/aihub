@@ -183,6 +183,7 @@ CREATE OR REPLACE FUNCTION set_featured_use_case(target_id UUID)
 RETURNS void
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = public
 AS $$
 BEGIN
   -- Unset all featured flags and set the target in one transaction
